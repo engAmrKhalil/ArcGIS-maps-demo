@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>ArcGIS Maps SDK for JavaScript Tutorials: Query a feature layer (SQL)</title>
+    <style>
+      html,body,#viewDiv{
+        padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+      }
+    </style>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.30/esri/themes/light/main.css">
+    <script src="https://js.arcgis.com/4.30/"></script>
+  </head>
+  <body>
+    <div id="viewDiv"></div>
+    <script>
+      require([
+      "esri/config",
+      "esri/Map",
+      "esri/views/MapView",
+      "esri/widgets/Sketch",
+      "esri/layers/GraphicsLayer",
+      "esri/layers/FeatureLayer"
+      ],(esriConfig, Map, MapView, Sketch, GraphicsLayer, FeatureLayer)=>{
+        esriConfig.apiKey="AAPTxy8BH1VEsoebNVZXo8HurGvD-obM7jTXQcR4hpLCZ1VRE5J5GMqODi37Xph1O6KpBJCkFage8qCk9eminpEtJj7K0hKqkztBTWWTSILeLRw9w7cziLBCoECTKpPNagdpzEOvngZK0ujeIdHWyCPaVnQMoZoVuFdIk4qUW7JED0e1N_7N5pLI3UfHY_xs8VYRQtzdbp1b71jzR7-9zAKufiSYFKopZuIk6Lu6gdKLQ2M.AT1_WlRznufo";
+
+        const map = new Map({
+          basemap: "arcgis/topographic"
+        });
+
+        const view = new MapView({
+          container:"viewDiv",
+          map : map ,
+          center:[-118.80543,34.03000],
+          zoom:13
+        });
+        const graphicsLayerSketch = new GraphicsLayer();
+        map.add(graphicsLayerSketch);
+
+        const sketch = new Sketch({
+        layer: graphicsLayerSketch,
+        view: view,
+        creationMode: "update" // Auto-select
+      });
+        view.ui.add(sketch, "top-right");
+      sketch.on("update" ,(event)=>{
+        if (event.state === "start"){
+          queryFeaturelayer(event.graphics[0].geometry);
+        }
+        if (event.state === "complete"){
+          graphicsLayerSketch.remove(event.graphics[0]); // Clear the graphic when a user clicks off of it or sketches new one
+        }
+        if (event.toolEventInfo && (event.toolEventInfo.type === "scale-stop" || event.toolEventInfo.type === "reshape-stop" || event.toolEventInfo.type === "move-stop")) {
+          queryFeaturelayer(event.graphics[0].geometry);
+        }
+      });
+
+      const parcelLayer= new FeatureLayer({
+        url: "https://services3.arcgis.com/GVgbJbqm8hXASVYi/arcgis/rest/services/LA_County_Parcels/FeatureServer/0"
+      });
+      function queryFeaturelayer(geometry){
+        const parcelQuery ={
+          spatialRelationship: "intersects",
+          geometry: geometry,
+          outFields : ["APN","UseType","TaxRateCity","Roll_LandValue"],
+          returnGeometry: true
+        };
+        
+        parcelLayer.queryFeatures(parcelQuery).then((results)=>{
+          displayResults(results);
+        }).catch((error)=>{
+          console.log(error);
+        });
+      }
+
+
+
+
+      function displayResults(results){
+        const symbol ={
+          type: "simple-fill",
+          color: [ 20, 130, 200, 0.5 ],
+          outline: {
+            color: "white",
+            width: .5
+        },
+      };
+      const popupTemplate = {
+        title: "Parcel {APN}",
+        content : "Type: {UseType} <br> Land value: {Roll_LandValue} <br> Tax Rate City: {TaxRateCity}"
+      };
+       //Set symbol and popup 
+    results.features.map((feature)=>{
+          feature.symbol = symbol;
+          feature.popupTemplate = popupTemplate;
+          return feature;
+    });
+    //clear display 
+    view.closePopup();
+    view.graphics.removeAll();
+    //add features to graphics layer
+    view.graphics.addMany(results.features);
+  // the end of the reqiure statment
+    }
+   
+      });
+    </script>
+  </body>
+</html>

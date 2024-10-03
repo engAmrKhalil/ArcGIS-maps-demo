@@ -1,0 +1,59 @@
+<html></html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <title>ArcGIS Maps SDK for JavaScript Tutorials: Display a map</title>
+
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+
+    <link rel="stylesheet" href="https://js.arcgis.com/4.30/esri/themes/light/main.css">
+    <script src="https://js.arcgis.com/4.30/"></script>
+
+  </head>
+  <body>
+    <div id="viewDiv"></div>
+
+   <script>
+    require([
+      "esri/config",
+      "esri/WebMap",
+      "esri/views/MapView",
+      "esri/widgets/ScaleBar",
+      "esri/widgets/Legend"
+    ],(esriConfig, WebMap, MapView, ScaleBar, Legend)=>{
+      esriConfig.apiKey = "AAPTxy8BH1VEsoebNVZXo8HurGvD-obM7jTXQcR4hpLCZ1VRE5J5GMqODi37Xph1O6KpBJCkFage8qCk9eminpEtJj7K0hKqkztBTWWTSILeLRw9w7cziLBCoECTKpPNagdpzEOvngZK0ujeIdHWyCPaVnQMoZoVuFdIk4qUW7JED0e1N_7N5pLI3UfHY_xs8VYRQtzdbp1b71jzR7-9zAKufiSYFKopZuIk6Lu6gdKLQ2M.AT1_WlRznufo";
+      const webmap = new WebMap ({
+       portalItem :{
+        id : "41281c51f9de45edaf1c8ed44bb10e30"
+       }
+      });
+
+      
+      const view = new MapView({
+        container:"viewDiv",
+        map : webmap ,
+        
+      });
+
+      const scalebar = new ScaleBar ({
+        view : view
+      });
+      view.ui.add(scalebar , "bottom-left");
+
+      const legend = new Legend ({
+        view :view
+      });
+      view.ui.add(legend ,"top-right");
+    });
+   </script>
+  </body>
+</html>

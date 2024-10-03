@@ -1,0 +1,132 @@
+<html></html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <title>ArcGIS Maps SDK for JavaScript Tutorials: Display a map</title>
+
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+      #basemapLanguage {
+        width:200px;
+        padding:10px;
+      }
+    </style>
+    <link rel="stylesheet" type="text/css" href="https://js.arcgis.com/calcite-components/2.11.1/calcite.css" />
+    <link rel="stylesheet" href="https://js.arcgis.com/4.30/esri/themes/light/main.css">
+    <script src="https://js.arcgis.com/4.30/"></script>
+    <script type="module" src="https://js.arcgis.com/calcite-components/2.11.1/calcite.esm.js"></script>
+    <script type="module" src="https://js.arcgis.com/calcite-components/2.11.1/calcite.esm.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://js.arcgis.com/calcite-components/2.11.1/calcite.css" />
+
+  </head>
+  <body>
+    <div id="viewDiv"></div>
+    <!-- the begeing of the calcite label and combobox component for all the languages. -->
+    
+    <div id="basemapLanguage" class="esri-widget">
+      <calcite-label>Basemap language</calcite-label>
+      <calcite-combobox id="languageCombobox" selection-mode="single" clear-disabled="true">
+          <calcite-combobox-item value="global" text-label="Global"></calcite-combobox-item>
+          <calcite-combobox-item value="local" text-label="Local"></calcite-combobox-item>
+          <calcite-combobox-item value="ar" text-label="Arabic"></calcite-combobox-item>
+          <calcite-combobox-item value="bs" text-label="Bosnian"></calcite-combobox-item>
+          <calcite-combobox-item value="ca" text-label="Catalan"></calcite-combobox-item>
+          <calcite-combobox-item value="zh-HK" text-label="Chinese (Hong Kong)"></calcite-combobox-item>
+          <calcite-combobox-item value="zh-CN" text-label="Chinese (Simplified)"></calcite-combobox-item>
+          <calcite-combobox-item value="zh-TW" text-label="Chinese (Taiwan)"></calcite-combobox-item>
+          <calcite-combobox-item value="hr" text-label="Croatian"></calcite-combobox-item>
+          <calcite-combobox-item value="cs" text-label="Czech"></calcite-combobox-item>
+          <calcite-combobox-item value="da" text-label="Danish"></calcite-combobox-item>
+          <calcite-combobox-item value="nl" text-label="Dutch"></calcite-combobox-item>
+          <calcite-combobox-item value="en" text-label="English"></calcite-combobox-item>
+          <calcite-combobox-item value="et" text-label="Estonian"></calcite-combobox-item>
+          <calcite-combobox-item value="fi" text-label="Finnish"></calcite-combobox-item>
+          <calcite-combobox-item value="fr" text-label="French"></calcite-combobox-item>
+          <calcite-combobox-item value="de" text-label="German"></calcite-combobox-item>
+          <calcite-combobox-item value="el" text-label="Greek"></calcite-combobox-item>
+          <calcite-combobox-item value="he" text-label="Hebrew"></calcite-combobox-item>
+          <calcite-combobox-item value="hu" text-label="Hungarian"></calcite-combobox-item>
+          <calcite-combobox-item value="id" text-label="Indonesian"></calcite-combobox-item>
+          <calcite-combobox-item value="it" text-label="Italian"></calcite-combobox-item>
+          <calcite-combobox-item value="ja" text-label="Japanese"></calcite-combobox-item>
+          <calcite-combobox-item value="ko" text-label="Korean"></calcite-combobox-item>
+          <calcite-combobox-item value="lv" text-label="Latvian"></calcite-combobox-item>
+          <calcite-combobox-item value="lt" text-label="Lithuanian"></calcite-combobox-item>
+          <calcite-combobox-item value="nb" text-label="Norwegian"></calcite-combobox-item>
+          <calcite-combobox-item value="pl" text-label="Polish"></calcite-combobox-item>
+          <calcite-combobox-item value="pt-BR" text-label="Portuguese (Brazil)"></calcite-combobox-item>
+          <calcite-combobox-item value="pt-PT" text-label="Portuguese (Portugal)"></calcite-combobox-item>
+          <calcite-combobox-item value="ro" text-label="Romanian"></calcite-combobox-item>
+          <calcite-combobox-item value="ru" text-label="Russian"></calcite-combobox-item>
+          <calcite-combobox-item value="sr" text-label="Serbian"></calcite-combobox-item>
+          <calcite-combobox-item value="es" text-label="Spanish" selected></calcite-combobox-item>
+          <calcite-combobox-item value="sv" text-label="Swedish"></calcite-combobox-item>
+          <calcite-combobox-item value="th" text-label="Thai"></calcite-combobox-item>
+          <calcite-combobox-item value="tr" text-label="Turkish"></calcite-combobox-item>
+          <calcite-combobox-item value="uk" text-label="Ukrainian"></calcite-combobox-item>
+          <calcite-combobox-item value="vi" text-label="Vietnamese"></calcite-combobox-item>
+      </calcite-combobox>
+  </div>
+
+
+<!-- the end of the calcite combobox combonent for all language -->
+
+
+    <script>
+      //The process of creating API key credentials and using an API key in your application is known as API key authentication.
+      require([
+        "esri/config",
+         "esri/Map",
+          "esri/views/MapView",
+          "esri/intl"
+        ], (esriConfig, Map, MapView,intl) => {
+        esriConfig.apiKey = "AAPTxy8BH1VEsoebNVZXo8HurGvD-obM7jTXQcR4hpLCZ1VRE5J5GMqODi37Xph1O6KpBJCkFage8qCk9eminpEtJj7K0hKqkztBTWWTSILeLRw9w7cziLBCoECTKpPNagdpzEOvngZK0ujeIdHWyCPaVnQMoZoVuFdIk4qUW7JED0e1N_7N5pLI3UfHY_xs8VYRQtzdbp1b71jzR7-9zAKufiSYFKopZuIk6Lu6gdKLQ2M.AT1_WlRznufo";
+        intl.setLocale("es");
+        const map = new Map ({
+          basemap: {
+            style : {
+              id : "arcgis/outdoor",
+              language:"es"
+            }
+          }
+        });
+        const view = new MapView ({
+          map: map,
+          center :[13,46],
+          zoom : 4 ,
+          container :"viewDiv"
+        });
+        function updateBasemapLanguage(languageCode){
+          intl.setLocale(languageCode);
+          view.map.basemap = {
+            style : {
+              id:"arcgis/outdoor",
+              language : languageCode
+            }
+          }
+        }
+
+
+
+const basemapLanguage =document.getElementById("basemapLanguage");
+// add to the view UI
+view.ui.add(basemapLanguage,"top-right");
+
+const languageCombobox = document.getElementById("languageCombobox");
+//when the combobox value changes, update the basemap language
+languageCombobox.addEventListener("calciteComboboxChange",(event)=>{
+  updateBasemapLanguage(event.target.value);
+});
+
+//the end of the require statment or function
+      });
+    </script>
+  </body>
+</html>

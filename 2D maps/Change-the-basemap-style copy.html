@@ -1,0 +1,117 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no"  />
+    <title>ArcGIS Maps SDK for JavaScript Tutorials: Display a map</title>
+    <style>
+      html,
+      body,
+      #viewDiv{
+        padding:0;
+        margin:0;
+        height:100%;
+        width:100%;
+      }
+      #basemapStyles{
+        width: 250px;
+      padding: 10px;
+      }
+    </style>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.30/esri/themes/light/main.css">
+    <script src="https://js.arcgis.com/4.30/"></script>
+    <script type="module" src="https://js.arcgis.com/calcite-components/2.11.1/calcite.esm.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://js.arcgis.com/calcite-components/2.11.1/calcite.css">
+  </head>
+  <body>
+    <div id="viewDiv"></div>
+    <div id="basemapStyles" class="esri-widget">
+      <calcite-label>Basemap style</calcite-label>
+      <calcite-combobox id="styleCombobox" selection-mode="single" clear-disabled>
+        <calcite-combobox-item value="arcgis/navigation" text-label="arcgis/navigation"></calcite-combobox-item>
+        <calcite-combobox-item value="arcgis/navigation-night" text-label="arcgis/navigation-night"></calcite-combobox-item>
+        <calcite-combobox-item value="arcgis/streets" text-label="arcgis/streets"></calcite-combobox-item>
+        <calcite-combobox-item value="arcgis/streets-relief" text-label="arcgis/streets-relief"></calcite-combobox-item>
+        <calcite-combobox-item value="arcgis/streets-night" text-label="arcgis/streets-night"></calcite-combobox-item>
+        <calcite-combobox-item value="arcgis/outdoor" text-label="arcgis/outdoor"></calcite-combobox-item>
+        <calcite-combobox-item value="arcgis/imagery" text-label="arcgis/imagery"></calcite-combobox-item>
+        <calcite-combobox-item value="arcgis/topographic" text-label="arcgis/topographic" selected></calcite-combobox-item>
+        <calcite-combobox-item value="arcgis/terrain" text-label="arcgis/terrain"></calcite-combobox-item>
+        <calcite-combobox-item value="arcgis/oceans" text-label="arcgis/oceans"></calcite-combobox-item>
+        <calcite-combobox-item value="arcgis/light-gray" text-label="arcgis/light-gray"></calcite-combobox-item>
+        <calcite-combobox-item value="arcgis/dark-gray" text-label="arcgis/dark-gray"></calcite-combobox-item>
+        <calcite-combobox-item value="arcgis/human-geography" text-label="arcgis/human-geography"></calcite-combobox-item>
+        <calcite-combobox-item value="arcgis/human-geography-dark" text-label="arcgis/human-geography-dark"></calcite-combobox-item>
+        <calcite-combobox-item value="arcgis/charted-territory" text-label="arcgis/charted-territory"></calcite-combobox-item>
+        <calcite-combobox-item value="arcgis/colored-pencil" text-label="arcgis/colored-pencil"></calcite-combobox-item>
+        <calcite-combobox-item value="arcgis/nova" text-label="arcgis/nova"></calcite-combobox-item>
+        <calcite-combobox-item value="arcgis/modern-antique" text-label="arcgis/modern-antique"></calcite-combobox-item>
+        <calcite-combobox-item value="arcgis/midcentury" text-label="arcgis/midcentury"></calcite-combobox-item>
+        <calcite-combobox-item value="arcgis/newspaper" text-label="arcgis/newspaper"></calcite-combobox-item>
+        <calcite-combobox-item value="osm/standard" text-label="osm/standard"></calcite-combobox-item>
+        <calcite-combobox-item value="osm/standard-relief" text-label="osm/standard-relief"></calcite-combobox-item>
+        <calcite-combobox-item value="osm/navigation" text-label="osm/navigation"></calcite-combobox-item>
+        <calcite-combobox-item value="osm/navigation-dark" text-label="osm/navigation-dark"></calcite-combobox-item>
+        <calcite-combobox-item value="osm/streets" text-label="osm/streets"></calcite-combobox-item>
+        <calcite-combobox-item value="osm/hybrid" text-label="osm/hybrid"></calcite-combobox-item>
+        <calcite-combobox-item value="osm/light-gray" text-label="osm/light-gray"></calcite-combobox-item>
+        <calcite-combobox-item value="osm/dark-gray" text-label="osm/dark-gray"></calcite-combobox-item>
+        <calcite-combobox-item value="osm/blueprint" text-label="osm/blueprint"></calcite-combobox-item>
+      </calcite-combobox>
+    </div>
+    <script>
+      require([
+      "esri/config",
+      "esri/WebMap",
+      "esri/views/MapView",
+      "esri/widgets/ScaleBar",
+      "esri/widgets/Legend"
+      ],(esriConfig,WebMap,MapView,ScaleBar,Legend)=>{
+        esriConfig.apiKey ="AAPTxy8BH1VEsoebNVZXo8HurGvD-obM7jTXQcR4hpLCZ1VRE5J5GMqODi37Xph1O6KpBJCkFage8qCk9eminpEtJj7K0hKqkztBTWWTSILeLRw9w7cziLBCoECTKpPNagdpzEOvngZK0ujeIdHWyCPaVnQMoZoVuFdIk4qUW7JED0e1N_7N5pLI3UfHY_xs8VYRQtzdbp1b71jzR7-9zAKufiSYFKopZuIk6Lu6gdKLQ2M.AT1_WlRznufo";
+
+        const webmap = new WebMap({
+        portalItem :{
+          id: "41281c51f9de45edaf1c8ed44bb10e30"
+        }
+      });
+      const view = new MapView({
+        container : "viewDiv",
+        map : webmap
+      });
+      const scalebar = new ScaleBar({
+        view : view
+      });
+        view.ui.add(scalebar , "top-right");
+      const legend = new Legend({
+        view:view
+      });
+      view.ui.add(legend,"bottom-left");
+
+
+       function updateBasemapStyle(basemapId){
+        view.map.basemap = basemapId;
+       } 
+       const basemapStylesDiv =document.getElementById("basemapStyles");
+       view.ui.add(basemapStyles ,"top-right")
+
+       const styleCombobox=document.getElementById("styleCombobox");
+      styleCombobox.addEventListener("calciteComboboxChange",(event)=>{
+        updateBasemapStyle(event.target.value);
+
+
+
+
+
+
+
+
+
+
+
+      })
+
+
+      });
+     
+    </script>
+  </body>
+</html>
